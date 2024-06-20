@@ -1,61 +1,83 @@
 package server
 
 import (
-	//"fmt"
+	"fmt"
 	"bufio"
 	"errors"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
-	log "github.com/ushanovsn/golanglogger"
+
+	"github.com/ushanovsn/golanglogger"
 )
 
-// selective nessesary permanent configuration data
-type Config struct {
+// TG Bot configuration structure
+type botParam struct {
 	TgToken string
+	confFile string
+	logLvl golanglogger.LoggingLevel
 }
 
+func InitBot() (botParam, error) {
+	// TG Bot configuration data
+	var params botParam
+	// error receiving logger level from flags
+	var lvlErr error
+
+	// check flags at start
+	flags := getFlags()
+
+	// get log level (flag received or default value)
+	params.logLvl, lvlErr = golanglogger.LoggingLevelValue(flags.logLevel)
+
+	// start logger with flags init values
+	log := golanglogger.NewSync(params.logLvl, flags.logFile)
+
+	// this IF one who can change config file
+	if flags.confFile != "" {
+		params.confFile = flags.confFile
+	} else {
+		params.confFile = defConfFile
+	}
+
+	log.Out(fmt.Sprintf("Start to load configuration from \"%s\" file", params.confFile))
 
 
-// project configuration data
-var CurConf Config
-// logger
-var log *botlog.Logger
+	if lvlErr != nil {
+		// need to load level from config file
 
-const (
-	confFilePath string = "tg_bot.conf"
- )
+	}
 
 
+
+	return params, nil
+}
 
 // returns default values for project configuration
-func loadDefaultConfig() (map[string] []string) {
-	return map[string] []string {
-		"log_file_path": {"tg_bot_log.log", "string"},
+func loadDefaultConfig() map[string][]string {
+	return map[string][]string{
+		"log_file_path":      {"tg_bot_log.log", "string"},
 		"telegram_bot_token": {"0000000000:AAES000000000000000000-ae0000000000", "regexp", `\A\d{10}:\w{22}-\w{12}\z`},
-		"log_split_size_b": {"0", "int"},
+		"log_split_size_b":   {"0", "int"},
 		"log_split_day_time": {"0", "int"},
-		"log_level": {"Error", "string"},
+		"log_level":          {"Error", "string"},
 	}
 }
-
-
 
 // main initializing and configure function
 func ConfigAndInit(fPath string) bool {
 	log = botlog.New(botlog.Error)
 	log.OutInfo("* Starting ConfigAndInit()...")
 
-	var fullConf map[string] []string
-	var lostConf map[string] []string
-
+	var fullConf map[string][]string
+	var lostConf map[string][]string
 
 	// check the file
 	if _, err := os.Stat(fPath); err == nil {
 		// file exist, now get config data
 		fullConf, lostConf = readConfig(fPath)
-	} else if errors.Is(err, os.ErrNotExist){
+	} else if errors.Is(err, os.ErrNotExist) {
 		// file is not exist, need create it
 		log.OutWarning("Config file is not exist")
 		if !createConfigFile(fPath) {
@@ -70,7 +92,6 @@ func ConfigAndInit(fPath string) bool {
 		return false
 	}
 
-
 	// check lost config data in config file and add it to file
 	if len(lostConf) > 0 {
 		if !addConfig(fPath, lostConf) {
@@ -78,7 +99,6 @@ func ConfigAndInit(fPath string) bool {
 			return false
 		}
 	}
-
 
 	log.OutDebug("Starting apply Logger config")
 
@@ -89,14 +109,12 @@ func ConfigAndInit(fPath string) bool {
 	lvl, _ := botlog.LoggingLevelValue(fullConf["log_level"][0])
 	log.SetLevel(lvl)
 
-
 	log.OutDebug("Applying permanent config data")
 
 	CurConf.TgToken = fullConf["telegram_bot_token"][0]
-	
+
 	return true
 }
-
 
 // stop all process of tg bot
 func StopBot() {
@@ -105,7 +123,7 @@ func StopBot() {
 }
 
 // read config from file
-func readConfig(filePath string) (map[string] []string, map[string] []string) {
+func readConfig(filePath string) (map[string][]string, map[string][]string) {
 	// load Defaults for config
 	fConf := loadDefaultConfig()
 	lostConf := loadDefaultConfig()
@@ -142,7 +160,7 @@ func readConfig(filePath string) (map[string] []string, map[string] []string) {
 			case "regexp":
 				if v, err := regexp.MatchString(def_val[2], param); err == nil && v {
 					fConf[values[0]][0] = param
-				} else if  err == nil {
+				} else if err == nil {
 					log.OutWarning("Param " + values[0] + " is not matched! Loaded by default. Skipped bad value: " + param)
 				} else {
 					log.OutWarning("Param " + values[0] + " is wrong. Loaded by default. Skipped bad value: " + param + ". Error: " + err.Error())
@@ -184,9 +202,8 @@ func readConfig(filePath string) (map[string] []string, map[string] []string) {
 	return fConf, lostConf
 }
 
-
 // add params to config file
-func addConfig(filePath string, lostData map[string] []string) bool {
+func addConfig(filePath string, lostData map[string][]string) bool {
 	// check file
 	f, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0666)
 	if err != nil {
@@ -205,7 +222,6 @@ func addConfig(filePath string, lostData map[string] []string) bool {
 
 	return true
 }
-
 
 // creating config file w header text
 func createConfigFile(filePath string) bool {
