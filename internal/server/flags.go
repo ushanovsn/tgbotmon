@@ -2,25 +2,19 @@ package server
 
 import (
 	"flag"
+	"github.com/ushanovsn/tgbotmon/internal/options"
 )
 
-// structure for holding flags values
-type flagStruct struct {
-	logLevel string
-	logFile string
-	confFile string
-}
 
-// processing flags values
-func getFlags() flagStruct{
-	var flags flagStruct
+// Set (update) flags values from cmd into server config.
+// Update only received flags, others configuration parameters are not changes.
+func setCmdFlags(conf *options.ServerConfig){
 
-	_ = flag.Value(&o.Net)
-
-	flag.Var(&o.Net, "a", "Server net address host:port")
-	flag.StringVar(&o.Logger.Level, "l", "info", "Logging level")
-
-	flag.Parse()
-
-	return flags
+	flag.StringVar(&conf.Host, "host", conf.Host, "Server host address")
+	flag.UintVar(&conf.Port, "port", conf.Port, "Server port")
+	flag.BoolVar(&conf.UseGui, "gui", conf.UseGui, "Enable server GUI")
+	flag.UintVar(&conf.GuiPort, "guiport", conf.GuiPort, "Server GUI port")
+	flag.StringVar(&conf.LogLevel, "loglvl", conf.LogLevel, "Server logging level")
+	flag.StringVar(&conf.LogFile, "logfilename", conf.LogFile, "Server log file name")
+	flag.StringVar(&conf.ConfFile, "confFile", conf.ConfFile, "Server config file path")
 }
