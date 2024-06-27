@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"reflect"
 
 	"github.com/ushanovsn/tgbotmon/internal/options"
 )
@@ -14,11 +15,9 @@ import (
 
 
 // main initializing and configure function
-func configurationProcess(srv *options.ServerObj) bool {
-
+func getConfig(srv *options.ServerObj) bool {
 	log := srv.GetLogger()
-
-	log.OutInfo("* Starting ConfigAndInit()...")
+	fPath := srv.GetConfFile()
 
 	var fullConf map[string][]string
 	var lostConf map[string][]string
@@ -34,11 +33,8 @@ func configurationProcess(srv *options.ServerObj) bool {
 			log.OutError("Config file can't be created")
 			return false
 		}
-		fullConf = loadDefaultConfig()
-		lostConf = loadDefaultConfig()
 	} else {
 		log.OutError("Error while checking config file: " + err.Error())
-		// stopping process
 		return false
 	}
 
@@ -50,30 +46,37 @@ func configurationProcess(srv *options.ServerObj) bool {
 		}
 	}
 
-	log.OutDebug("Starting apply Logger config")
-
-	sizeLogFile, _ := strconv.Atoi(fullConf["log_split_size_b"][0])
-	durationLogFile, _ := strconv.Atoi(fullConf["log_split_day_time"][0])
-	log.SetFile(fullConf["log_file_path"][0], sizeLogFile, durationLogFile)
-
-	lvl, _ := botlog.LoggingLevelValue(fullConf["log_level"][0])
-	log.SetLevel(lvl)
-
-	log.OutDebug("Applying permanent config data")
-
-	CurConf.TgToken = fullConf["telegram_bot_token"][0]
+	log.OutInfo("Config file succesfully processed")
 
 	return true
 }
 
-// stop all process of tg bot
-func StopBot() {
-	log.Out("Logger stopping")
-	log.StopLog()
-}
 
 // read config from file
 func readConfig(filePath string) (map[string][]string, map[string][]string) {
+
+	type User struct {
+		Name  string `mytag:"MyName"`
+		Email string `mytag:"MyEmail"`
+	}
+	
+	u := User{"Bob", "bob@mycompany.com"}
+	t := reflect.TypeOf(u)
+	
+	for _, fieldName := range []string{"Name", "Email"} {
+		field, found := t.FieldByName(fieldName)
+		if !found {
+			continue
+		}
+		fmt.Printf("\nField: User.%s\n", fieldName)
+		fmt.Printf("\tWhole tag value : %q\n", field.Tag)
+		fmt.Printf("\tValue of 'mytag': %q\n", field.Tag.Get("mytag"))
+	}
+
+	/*
+
+	*/
+
 	// load Defaults for config
 	fConf := loadDefaultConfig()
 	lostConf := loadDefaultConfig()

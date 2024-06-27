@@ -7,6 +7,7 @@ import (
 
 
 // Set (update) flags values from cmd into server config.
+//
 // Update only received flags, others configuration parameters are not changes.
 func setCmdFlags(conf *options.ServerConfig){
 
