@@ -22,13 +22,13 @@ func setCmdFlags(conf *options.ServerConfig){
 	}
 
 	// deffine the parameters
-	flags.StringVar(&tmpF.Host, "host", conf.Host, "Server host address")
-	flags.UintVar(&tmpF.Port, "port", conf.Port, "Server port")
-	flags.BoolVar(&tmpF.UseGui, "gui", conf.UseGui, "Enable server GUI")
+	flags.StringVar(&tmpF.Host, "h", conf.Host, "Server host address")
+	flags.UintVar(&tmpF.Port, "p", conf.Port, "Server port")
+	flags.BoolVar(&tmpF.UseGui, "gui", conf.UseGui, "Enable server GUI (bool)")
 	flags.UintVar(&tmpF.GuiPort, "guiport", conf.GuiPort, "Server GUI port")
-	flags.StringVar(&tmpF.LogLevel, "loglvl", conf.LogLevel, "Server logging level")
-	flags.StringVar(&tmpF.LogFile, "logfilename", conf.LogFile, "Server log file name")
-	flags.StringVar(&tmpF.ConfFile, "conffilename", conf.ConfFile, "Server config file path")
+	flags.StringVar(&tmpF.LogLevel, "loglvl", conf.LogLevel, "Server logging level (text)")
+	flags.StringVar(&tmpF.LogFile, "logfile", conf.LogFile, "Server log file path\\name")
+	flags.StringVar(&tmpF.ConfFile, "conffile", conf.ConfFile, "Server config file path\\name")
 
 	// service will stopping in this place when error occurs
 	flags.Parse(os.Args[1:])

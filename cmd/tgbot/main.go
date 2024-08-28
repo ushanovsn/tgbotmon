@@ -1,17 +1,17 @@
 package main
 
 import (
+	"time"
 	"github.com/ushanovsn/tgbotmon/internal/tgbot"
 )
 
 
 
 func main() {
-	// load and init parameters
-	conf, err := tgbot.InitBot()
+	bot := tgbot.InitBot()
+	tgbot.StartBot(bot)
 
-	if err == nil {
-		// possible to start tg bot server
-		tgbot.StartBot(conf)
-	}
+	time.Sleep(3 * time.Second)
+
+	tgbot.StopBot(bot)
 }

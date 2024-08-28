@@ -5,18 +5,16 @@ import (
 )
 
 
-// Server configuration values
+// Telegram Bot configuration values
 //
 // Tags "cfg" and "descr" uses for config file
-type ServerConfig struct {
+type TgBotConfig struct {
 	// host address
-	Host     string	`cfg:"host" descr:"Server host address"`
+	SrvHost  string	`cfg:"server_host" descr:"Server host address"`
 	// host port
-	Port     uint	`cfg:"port" descr:"Server host port"`
-	// gui enable flag
-	UseGui   bool	`cfg:"gui_enable" descr:"Server GUI enable flag (true/false)"`
-	// gui port (if enabled)
-	GuiPort  uint	`cfg:"gui_port" descr:"Server GUI port"`
+	SrvPort   uint	`cfg:"server_port" descr:"Server host port"`
+	// host port
+	Token    string	`cfg:"tgbot_token" descr:"Token for Telegram Bot"`
 	// logger level
 	LogLevel string	`cfg:"logging_level" descr:"Logger logging level (Debug/Info/Warning/Error)"`
 	// log file size in megabytes
@@ -29,9 +27,9 @@ type ServerConfig struct {
 	ConfFile string	`cfg:"config_file" descr:"Configuration file name or full path (without spaces or use quotes). When file not exist - it will be creating"`
 }
 
-// Server object (full data of server)
-type ServerObj struct {
-	conf   ServerConfig
+// Telegram Bot object (full data of TgBot)
+type TgBotObj struct {
+	conf   TgBotConfig
 	logger golanglogger.Golanglogger
 }
 
@@ -40,70 +38,74 @@ type ServerObj struct {
 // *********************   Interface "Options" implementation   *********************
 
 // Getting the logger interface object (the interface is actually a pointer)
-func (obj *ServerObj) GetLogger() golanglogger.Golanglogger {
+func (obj *TgBotObj) GetLogger() golanglogger.Golanglogger {
 	return obj.logger
 }
 
 // Getting the logger logging level
-func (obj *ServerObj) GetLoggerLevelParam() golanglogger.LoggingLevel {
+func (obj *TgBotObj) GetLoggerLevelParam() golanglogger.LoggingLevel {
 	v, _ := golanglogger.LoggingLevelValue(obj.conf.LogLevel)
 
 	return   v
 }
 
 // Set the logger object (an interface object or pointer to object that imlement interface Golanglogger)
-func (obj *ServerObj) SetLogger(log golanglogger.Golanglogger) {
+func (obj *TgBotObj) SetLogger(log golanglogger.Golanglogger) {
 	obj.logger = log
 }
 
 // Getting the loger file path (or just name)
-func (obj *ServerObj) GetLogFileName() string {
+func (obj *TgBotObj) GetLogFileName() string {
 	return obj.conf.LogFile
 }
 
 
 // Getting the config file path (or just name)
-func (obj *ServerObj) GetConfFileName() string {
+func (obj *TgBotObj) GetConfFileName() string {
 	return obj.conf.ConfFile
 }
 
 // Getting the universal pointer to configurations structure (as Interface)
-func (obj *ServerObj) GetConfigUniversalPtr() interface{} {
+func (obj *TgBotObj) GetConfigUniversalPtr() interface{} {
 	return &obj.conf
 }
 
 // Getting the description for config file
-func (obj *ServerObj) GetConfigDescr() string {
+func (obj *TgBotObj) GetConfigDescr() string {
 	return DefSrvConfDescr
 }
 
 
 
-// *********************   Specific for server methods   *********************
+// *********************   Specific for tgbot methods   *********************
 
-// Getting the pointer to Server configurations structure
-func (obj *ServerObj) GetConfigPtr() *ServerConfig {
+// Getting the pointer to TgBot configurations structure
+func (obj *TgBotObj) GetConfigPtr() *TgBotConfig {
 	return &obj.conf
 }
 
 // Getting the server port host address
-func (obj *ServerObj) GetHost() string {
-	return obj.conf.Host
+func (obj *TgBotObj) GetServerHost() string {
+	return obj.conf.SrvHost
 }
 
 // Getting the server port number
-func (obj *ServerObj) GetPort() uint {
-	return obj.conf.Port
+func (obj *TgBotObj) GetServerPort() uint {
+	return obj.conf.SrvPort
 }
 
 // Getting the log file size mb
-func (obj *ServerObj) GetLogFSizeMb() uint {
+func (obj *TgBotObj) GetLogFSizeMb() uint {
 	return obj.conf.LogSizeMb
 }
 
 // Getting the log file size days
-func (obj *ServerObj) GetLogFSizeD() uint {
+func (obj *TgBotObj) GetLogFSizeD() uint {
 	return obj.conf.LogSizeD
 }
 
+// Getting the token
+func (obj *TgBotObj) GetToken() string {
+	return obj.conf.Token
+}
 

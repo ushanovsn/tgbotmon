@@ -9,7 +9,7 @@ import (
 
 
 
-// Startimg servers processes
+// Starting servers processes
 func StartServer(srv *options.ServerObj) {
 	log := srv.GetLogger()
 	log.Out("Server starting...")
@@ -61,6 +61,9 @@ func InitServer() *options.ServerObj {
 
 	if log.CurrentLevel() != srv.GetLoggerLevelParam() {
 		log.SetLevel(srv.GetLoggerLevelParam())
+	}
+	if szm, szd := log.CurrentFileControl(); szm != int(srv.GetLogFSizeMb()) || szd != int(srv.GetLogFSizeD()) {
+		log.SetFileParam(int(szm), int(szd))
 	}
 
 	return &srv

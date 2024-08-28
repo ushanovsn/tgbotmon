@@ -8,10 +8,13 @@ const (
 	DefSrvLogFile string = "server.log"
 	
 	// default logger level
-	//DefSrvLogLvl string = "Error"
 	DefSrvLogLvl string = "Error"
 	// default logger name
 	DefSrvLogName string = "SERVER"
+	// default log file size in megabytes
+	DefSrvLogSizeMb uint = 0
+	// default log file size in days
+	DefSrvLogSizeDay uint = 0
 
 	// default host address
 	DefSrvHost string = "localhost"
@@ -21,10 +24,10 @@ const (
 	DefSrvGuiPort uint = 3005
 
 	// default GUI activating
-	DefUseGui bool = false
+	DefSrvUseGui bool = false
 
 	// default description for config file
-	DefConfDescr string = "The configuration file for the \"SERVER\" process"
+	DefSrvConfDescr string = "The configuration file for the \"SERVER\" process"
  )
 
 
@@ -32,9 +35,11 @@ const (
  func (obj *ServerObj) SetDefaultConf() {
 	obj.conf.Host = DefSrvHost
 	obj.conf.Port = DefSrvPort
-	obj.conf.UseGui = DefUseGui
+	obj.conf.UseGui = DefSrvUseGui
 	obj.conf.GuiPort = DefSrvGuiPort
 	obj.conf.LogLevel = DefSrvLogLvl
+	obj.conf.LogSizeMb = DefSrvLogSizeMb
+	obj.conf.LogSizeD = DefSrvLogSizeDay
 	obj.conf.LogFile = DefSrvLogFile
 	obj.conf.ConfFile = DefSrvConfFile
 }
