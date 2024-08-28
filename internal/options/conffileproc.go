@@ -48,7 +48,6 @@ func ProcConfig(srv Options) bool {
 	return true
 }
 
-
 // Read and apply config from file
 func readConfig(filePath string, config interface{}, log golanglogger.Golanglogger) error {
 	f, err := os.Open(filePath)
@@ -76,7 +75,7 @@ func readConfig(filePath string, config interface{}, log golanglogger.Golanglogg
 
 		// split parameter string
 		words := strings.Split(line, "=")
-		
+
 		// correct string contains one symbol "=", Name of parameter at left part and Value at right part
 		if len(words) != 2 {
 			errCnt++
@@ -85,7 +84,7 @@ func readConfig(filePath string, config interface{}, log golanglogger.Golanglogg
 		}
 
 		readName := strings.TrimSpace(words[0])
-		readVal :=  strings.TrimSpace(words[1])
+		readVal := strings.TrimSpace(words[1])
 
 		// trying to find readed parameter in config structure by tags
 		for i := 0; i < confRef.NumField(); i++ {
@@ -151,7 +150,6 @@ func readConfig(filePath string, config interface{}, log golanglogger.Golanglogg
 				default:
 					log.OutError(fmt.Sprintf("Type \"%s\" of parameter \"%s\" was skipped while processing config file", (confRef.Field(i).Type()), readName))
 				}
-				
 
 				// logging errors
 				if cantUse {
@@ -175,18 +173,18 @@ func readConfig(filePath string, config interface{}, log golanglogger.Golanglogg
 	return nil
 }
 
-
 // creating config file w header text
 func createConfigFile(filePath string, config interface{}, descr string, log golanglogger.Golanglogger) bool {
 	fRes := true
-	headerConf := `###   ` + descr + `   ###` + "\n" + "#\n" +
-				  `# Config file contains "Name" and "Value" of parameters separated by a symbol "="` + "\n" +
-				  `# Symbol "=" is allowed to use no more than 1 piece per line` + "\n" +
-				  `# If this file is deleted, the service will automatically create a new file at startup` + "\n" +
-				  `# File will be filled with all valid parameters with default values` + "\n" +
-				  `#` + "\n" +
-				  `# Comments should start with the "#" character from the beginning of the line` + "\n" +
-				  "\n\n"
+	headerConf := `###   ` + descr + `   ###` + "\n" +
+		"#\n" +
+		`# Config file contains "Name" and "Value" of parameters separated by a symbol "="` + "\n" +
+		`# Symbol "=" is allowed to use no more than 1 piece per line` + "\n" +
+		`# If this file is deleted, the service will automatically create a new file at startup` + "\n" +
+		`# File will be filled with all valid parameters with default values` + "\n" +
+		`#` + "\n" +
+		`# Comments should start with the "#" character from the beginning of the line` + "\n" +
+		"\n\n"
 
 	log.Out("Creating config file...")
 
@@ -204,7 +202,6 @@ func createConfigFile(filePath string, config interface{}, descr string, log gol
 		fRes = false
 	}
 
-
 	// reflect value of input config structure
 	var confRef = reflect.ValueOf(config).Elem()
 
@@ -217,7 +214,7 @@ func createConfigFile(filePath string, config interface{}, descr string, log gol
 		// value of parameter
 		pValue := confRef.Field(i)
 
-		lines := "\n" + "# " + pDescr + "\n" +  fmt.Sprintf("%s = %v", pName, pValue) + "\n"
+		lines := "\n" + "# " + pDescr + "\n" + fmt.Sprintf("%s = %v", pName, pValue) + "\n"
 
 		if _, err = f.WriteString(lines); err != nil {
 			log.OutDebug("Error while write lines: \n" + lines)

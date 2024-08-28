@@ -4,7 +4,6 @@ import (
 	"github.com/ushanovsn/golanglogger"
 )
 
-
 // Universal interface for use options
 type Options interface {
 	// Getting the logger interface object (the interface is actually a pointer)
@@ -17,10 +16,10 @@ type Options interface {
 	GetLogFileName() string
 
 	// Getting the config file path (or just name)
-    GetConfFileName() string
+	GetConfFileName() string
 	// Getting the pointer to configurations structure
-    GetConfigUniversalPtr() interface{}
+	GetConfigUniversalPtr() interface{}
 
 	// Getting the description for config file
-    GetConfigDescr() string
+	GetConfigDescr() string
 }

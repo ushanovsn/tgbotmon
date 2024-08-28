@@ -1,11 +1,9 @@
 package main
 
 import (
-	"time"
 	"github.com/ushanovsn/tgbotmon/internal/server"
+	"time"
 )
-
-
 
 func main() {
 	srv := server.InitServer()

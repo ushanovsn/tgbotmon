@@ -2,15 +2,14 @@ package tgbot
 
 import (
 	"flag"
-	"os"
 	"github.com/ushanovsn/tgbotmon/internal/options"
+	"os"
 )
-
 
 // Set (update) flags values from cmd into tgbot config.
 //
 // Update only received flags, others configuration parameters are not changes.
-func setCmdFlags(conf *options.TgBotConfig){
+func setCmdFlags(conf *options.TgBotConfig) {
 	var tmpF options.TgBotConfig
 	var flags *flag.FlagSet
 
@@ -30,7 +29,7 @@ func setCmdFlags(conf *options.TgBotConfig){
 	flags.StringVar(&tmpF.ConfFile, "conffile", conf.ConfFile, "Server config file path\\name")
 
 	// service will stopping in this place when error occurs
-	flags.Parse(os.Args[1:])
+	_ = flags.Parse(os.Args[1:])
 
 	// now set parameters to config
 	conf.SrvHost = tmpF.SrvHost

@@ -1,11 +1,9 @@
 package main
 
 import (
-	"time"
 	"github.com/ushanovsn/tgbotmon/internal/tgbot"
+	"time"
 )
-
-
 
 func main() {
 	bot := tgbot.InitBot()

@@ -2,15 +2,14 @@ package server
 
 import (
 	"flag"
-	"os"
 	"github.com/ushanovsn/tgbotmon/internal/options"
+	"os"
 )
-
 
 // Set (update) flags values from cmd into server config.
 //
 // Update only received flags, others configuration parameters are not changes.
-func setCmdFlags(conf *options.ServerConfig){
+func setCmdFlags(conf *options.ServerConfig) {
 	var tmpF options.ServerConfig
 	var flags *flag.FlagSet
 
@@ -31,7 +30,7 @@ func setCmdFlags(conf *options.ServerConfig){
 	flags.StringVar(&tmpF.ConfFile, "conffile", conf.ConfFile, "Server config file path\\name")
 
 	// service will stopping in this place when error occurs
-	flags.Parse(os.Args[1:])
+	_ = flags.Parse(os.Args[1:])
 
 	// now set parameters to config
 	conf.Host = tmpF.Host

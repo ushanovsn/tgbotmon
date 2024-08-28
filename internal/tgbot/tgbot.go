@@ -21,14 +21,11 @@ func StartBot(bot *options.TgBotObj) {
 	log.Out("TgBot successfully started!")
 }
 
-
 // Stop all process of TgBot
 func StopBot(bot *options.TgBotObj) {
 	// stopping logger
 	bot.GetLogger().StopLog()
 }
-
-
 
 // Init tgbot data and configurations.
 //
@@ -40,7 +37,7 @@ func InitBot() *options.TgBotObj {
 	bot.SetDefaultConf()
 	// receive flags at start and use it
 	setCmdFlags(bot.GetConfigPtr())
-	
+
 	// start logger with init values (flag received or default value)
 	log := golanglogger.NewSync(bot.GetLoggerLevelParam(), bot.GetLogFileName())
 	// save logger to tgbot object
@@ -71,9 +68,7 @@ func InitBot() *options.TgBotObj {
 	return &bot
 }
 
-
-
-func InitializingBot(bot *options.TgBotObj)  {
+func InitializingBot(bot *options.TgBotObj) {
 	log := bot.GetLogger()
 
 	tgBot, err := tgbotapi.NewBotAPI(bot.GetToken())
@@ -108,7 +103,6 @@ func InitializingBot(bot *options.TgBotObj)  {
 			reply = "Запуск!"
 		case "stop":
 			log.OutInfo("Stop cmd receiving")
-			reply = "Стоп"
 			return
 		default:
 			reply = fmt.Sprintf("А это, %s, правильный вопрос...", update.Message.From.UserName)
@@ -126,4 +120,3 @@ func InitializingBot(bot *options.TgBotObj)  {
 
 	log.Out("TgBot successfully started!")
 }
-

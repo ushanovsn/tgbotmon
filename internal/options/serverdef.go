@@ -1,12 +1,11 @@
 package options
 
-
 const (
 	// default config file name
 	DefSrvConfFile string = "server.conf"
 	// default log file name
 	DefSrvLogFile string = "server.log"
-	
+
 	// default logger level
 	DefSrvLogLvl string = "Error"
 	// default logger name
@@ -28,11 +27,10 @@ const (
 
 	// default description for config file
 	DefSrvConfDescr string = "The configuration file for the \"SERVER\" process"
- )
+)
 
-
- // Set default values to configuration structure
- func (obj *ServerObj) SetDefaultConf() {
+// Set default values to configuration structure
+func (obj *ServerObj) SetDefaultConf() {
 	obj.conf.Host = DefSrvHost
 	obj.conf.Port = DefSrvPort
 	obj.conf.UseGui = DefSrvUseGui

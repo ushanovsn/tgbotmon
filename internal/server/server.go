@@ -7,26 +7,19 @@ import (
 	"github.com/ushanovsn/golanglogger"
 )
 
-
-
 // Starting servers processes
 func StartServer(srv *options.ServerObj) {
 	log := srv.GetLogger()
 	log.Out("Server starting...")
 
-
-
 	log.Out("Server successfully started!")
 }
-
 
 // Stop all process of server
 func StopServer(srv *options.ServerObj) {
 	// stopping logger
 	srv.GetLogger().StopLog()
 }
-
-
 
 // Init server data and configurations.
 //
@@ -38,7 +31,7 @@ func InitServer() *options.ServerObj {
 	srv.SetDefaultConf()
 	// receive flags at start and use it
 	setCmdFlags(srv.GetConfigPtr())
-	
+
 	// start logger with init values (flag received or default value)
 	log := golanglogger.NewSync(srv.GetLoggerLevelParam(), srv.GetLogFileName())
 	// save logger to server object
