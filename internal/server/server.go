@@ -1,8 +1,7 @@
 package server
 
 import (
-	"fmt"
-
+	//"fmt"
 	"github.com/ushanovsn/tgbotmon/internal/options"
 
 	"github.com/ushanovsn/golanglogger"
@@ -39,30 +38,30 @@ func InitServer() *options.ServerObj {
 	srv.SetDefaultConf()
 	// receive flags at start and use it
 	setCmdFlags(srv.GetConfigPtr())
-
+	
 	// start logger with init values (flag received or default value)
-	log := golanglogger.NewSync(srv.GetLoggerLevel(), srv.GetLogFile())
+	log := golanglogger.NewSync(srv.GetLoggerLevelParam(), srv.GetLogFileName())
 	// save logger to server object
 	srv.SetLogger(log)
+	//log.SetName(options.DefSrvLogName)
 
-	log.Out(fmt.Sprintf("Start to load configuration from \"%s\" file", srv.GetConfFile()))
+	log.Out("The server is being initialized now...")
 
 	// load and process configuration file
-	ok := getConfig(&srv)
-
+	ok := options.ProcConfig(&srv)
 	if !ok {
-		log.OutError("Error while read configuration from file. Some parameters was set to default values")
+		log.OutError("Error while read configuration from file. Missing parameters was set to default values")
 	}
 
-	// updating the flags values in to the loaded configuration - flags have a higher priority
 	setCmdFlags(srv.GetConfigPtr())
+	log.OutInfo("Updated config by received flags")
 
-	// apply the final configuration
-	//.........................
+	// apply the configuration
+	log.Out("Now applying configuration parameters")
 
-
-
-	log.SetName(options.DefSrvLogFile)
+	if log.CurrentLevel() != srv.GetLoggerLevelParam() {
+		log.SetLevel(srv.GetLoggerLevelParam())
+	}
 
 	return &srv
 }

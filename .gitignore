@@ -418,10 +418,5 @@ _testmain.go
 
 # User defined
 coverage.out
-tgbotmon
-tgbot_monitoring
-tg_bot_log.log*
-tgbot_monitoring_log.log
-tg_bot.conf
-tgbot_monitoring.conf
-
+*.log*
+*.conf
