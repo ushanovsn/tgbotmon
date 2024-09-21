@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-// Set (update) flags values from cmd into tgbot config.
+// Set (update) flags values from cmd into config.
 //
 // Update only received flags, others configuration parameters are not changes.
 func setCmdFlags(conf *options.TgBotConfig) {

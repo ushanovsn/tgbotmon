@@ -214,12 +214,14 @@ func createConfigFile(filePath string, config interface{}, descr string, log gol
 		// value of parameter
 		pValue := confRef.Field(i)
 
-		lines := "\n" + "# " + pDescr + "\n" + fmt.Sprintf("%s = %v", pName, pValue) + "\n"
+		if pName != "" {
+			lines := "\n" + "# " + pDescr + "\n" + fmt.Sprintf("%s = %v", pName, pValue) + "\n"
 
-		if _, err = f.WriteString(lines); err != nil {
-			log.OutDebug("Error while write lines: \n" + lines)
-			log.OutError("Error while write line in config file. Err: " + err.Error())
-			fRes = false
+			if _, err = f.WriteString(lines); err != nil {
+				log.OutDebug("Error while write lines: \n" + lines)
+				log.OutError("Error while write line in config file. Err: " + err.Error())
+				fRes = false
+			}
 		}
 	}
 
